@@ -1,28 +1,27 @@
-# To learn more about how to use Nix to configure your environment
-# see: https://developers.google.com/idx/guides/customize-idx-env
 { pkgs, ... }: {
   # Which nixpkgs channel to use.
-  channel = "stable-23.11"; # or "unstable"
+  channel = "stable-23.11"; # Or "unstable"
   # Use https://search.nixos.org/packages to find packages
   packages = [
     pkgs.nodejs_20
+    pkgs.nodePackages.npm
+    pkgs.nodePackages.typescript-language-server
   ];
   # Sets environment variables in the workspace
   env = {};
-  idx = {
-    # Search for the extensions you want on https://open-vsx.org/ and use "publisher.id"
-    extensions = [
-      "google.gemini-cli-vscode-ide-companion"
-    ];
-    workspace = {
-      # Runs when a workspace is first created with this `dev.nix` file
-      onCreate = {
-        npm-install = "npm ci --no-audit --prefer-offline --no-progress --timing";
-      };
-      # Runs when a workspace is (re)started
-      onStart= {
-        run-server = "npm run dev";
-      };
+  # Services to make available in the preview window
+  services = {
+    # Example:
+    # web-server = {
+    #   command = "npm run start";
+    #   port = 8080;
+    # };
+    postgres = {
+      enable = true;
+      package = pkgs.postgresql;
+      extensions = [ pkgs.postgis ];
     };
   };
+  #
+  # More info: https://developers.google.com/idx/guides/customize-idx-env
 }
