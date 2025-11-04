@@ -23,11 +23,11 @@ export const createPin = async (req: CustomRequest, res: Response) => {
 
   try {
     // Usar ST_SetSRID y ST_MakePoint para crear la geometría
-    const query = '
+    const query = `
       INSERT INTO public.pines_negocio (id_usuario_creador, tipo_pin, titulo, descripcion, geom)
       VALUES ($1, $2, $3, $4, ST_SetSRID(ST_MakePoint($5, $6), 4326))
       RETURNING *;
-    ';
+    `;
     const values = [id_usuario_creador, tipo_pin, titulo, descripcion, lng, lat];
     const result = await pool.query(query, values);
 
@@ -94,12 +94,12 @@ export const updatePin = async (req: CustomRequest, res: Response) => {
       return res.status(403).json({ error: 'No tiene permiso para actualizar este pin' });
     }
 
-    const query = '
+    const query = `
       UPDATE public.pines_negocio
       SET titulo = $1, descripcion = $2
       WHERE id_pin = $3
       RETURNING *;
-    ';
+    `;
     const result = await pool.query(query, [titulo, descripcion, id]);
 
     res.json(result.rows[0]);

@@ -59,13 +59,7 @@ var createPin = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 _c.label = 1;
             case 1:
                 _c.trys.push([1, 3, , 4]);
-                query = ';
-                INSERT;
-                INTO;
-                public.pines_negocio(id_usuario_creador, tipo_pin, titulo, descripcion, geom);
-                VALUES($1, $2, $3, $4, ST_SetSRID(ST_MakePoint($5, $6), 4326));
-                RETURNING * ;
-                ';;
+                query = "\n      INSERT INTO public.pines_negocio (id_usuario_creador, tipo_pin, titulo, descripcion, geom)\n      VALUES ($1, $2, $3, $4, ST_SetSRID(ST_MakePoint($5, $6), 4326))\n      RETURNING *;\n    ";
                 values = [id_usuario_creador, tipo_pin, titulo, descripcion, lng, lat];
                 return [4 /*yield*/, db_1.default.query(query, values)];
             case 2:
@@ -155,15 +149,7 @@ var updatePin = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 if (pinResult.rows[0].id_usuario_creador !== id_usuario_actual) {
                     return [2 /*return*/, res.status(403).json({ error: 'No tiene permiso para actualizar este pin' })];
                 }
-                query = ';
-                UPDATE;
-                public.pines_negocio;
-                SET;
-                titulo = $1, descripcion = $2;
-                WHERE;
-                id_pin = $3;
-                RETURNING * ;
-                ';;
+                query = "\n      UPDATE public.pines_negocio\n      SET titulo = $1, descripcion = $2\n      WHERE id_pin = $3\n      RETURNING *;\n    ";
                 return [4 /*yield*/, db_1.default.query(query, [titulo, descripcion, id])];
             case 3:
                 result = _c.sent();
